@@ -3,7 +3,7 @@ applianceInfo:
   location:
     address:
     address2:
-    city: "{{  city_name  }}"
+    city: "Broadlands"
     state: Virginia
     zipCode:
     country: US
