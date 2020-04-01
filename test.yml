@@ -7,16 +7,24 @@
     orchip: seteam-orchestrator.silverpeak.cloud 
     filename: ec.yml 
     ztc_name: craigtest
+    city_name: "Broadlands"
     auto_apply: true
 
   vars_files: 
-    - /home/craig/buildyaml/sewan.yml
+    #- /home/craig/buildyaml/sewan.yml
 
   tasks:
     - name: import variable
       include_vars: 
         file: "{{ filename }}"  
         name: preconfig
+        
+    - name: "Create preconfig template"
+      template:
+       src: "{{ filename }}"
+       dest: "ec_new.yaml"
+      tags:
+       "create_template"     
 
     - name: do encode
       shell: echo {{ preconfig | to_yaml | b64encode }}  
