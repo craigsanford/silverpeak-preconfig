@@ -1,0 +1,50 @@
+# template details
+blank_template_store_path: "templates"
+built_template_store_path: "files"
+base_template_name: "ec_TEMPLATE.yml"
+
+# device infomation
+ec_device_name: "test-ec-vm"
+rendered_template_name: "{{  built_template_store_path  }}/{{  ec_device_name  }}.yaml"
+
+# unity Orchestrator details
+orchip: "18.217.100.212" 
+ztc_name: "{{  ec_device_name }}.yaml"
+auto_apply: false
+
+# Template vars
+address_1: "24 Finstock Way"
+address_2: "Bishopwayland"
+city_name: "Newcastle"
+state: "Bellway"
+postcode: "NE21 6QE"
+country: "Wayland"
+
+# contact details
+name: "Billy Fish"
+email: "test@test.com"
+phone: "08090848333"
+
+# Interfaces
+lan_interface_name_0: "lan0"
+#lan_interface_name_0_zone: "default"
+lan_interface_name_0_label: "TRUST"
+lan_interface_name_0_ip: "10.100.0.1/24"
+lan_interface_name_0_type: "lan"
+
+wan_interface_name_0: "wan0"
+#wan_interface_name_0_zone: "default"
+wan_interface_name_0_ip: "109.150.47.242/30"
+wan_interface_name_0_nexthop: "109.150.47.241"
+wan_interface_name_0_label: "INET1"
+wan_interface_name_0_type: "wan"
+wan_interface_name_0_nw_in: 200000
+wan_interface_name_0_nw_out: 2000000
+wan_interface_name_0_fw_mode: "statefulsnat"
+wan_interface_name_0_nat: "auto"
+
+# deployment infomation
+device_mode: "inline-router"
+
+
+ 

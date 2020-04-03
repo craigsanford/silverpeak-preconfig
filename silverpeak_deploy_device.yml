@@ -1,0 +1,20 @@
+# deploying rendered configs to orchestrator
+---
+- name: "Push EC Configs to Orchestrator"
+  hosts: localhost
+  gather_facts: no
+
+  # playbook vars
+  vars:
+
+  # import vault and var files
+  vars_files:
+   - ./vault/silverpeak
+   - ./group_vars/ec_test.yml   
+
+  roles:
+  # tags:
+  # create_template - 
+  # push_to_orchestrator - 
+  - create_template
+  - push_to_orchestrator

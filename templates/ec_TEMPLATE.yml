@@ -1,0 +1,74 @@
+applianceInfo:
+  hostname: "{{  ec_device_name  }}"
+  group: Group 1
+  location: 
+    address: "{{  address_1  }}"
+    address2: "{{  address_2  }}"
+    city: "{{  city_name  }}"
+    state: "{{  state  }}"
+    zipCode: "{{  postcode  }}"
+    country: "{{  country  }}"
+  contact:
+    name: "{{  name  }}"
+    email: "{{  email  }}"
+    phoneNumber: "{{  phone  }}"
+
+deploymentInfo:
+  deploymentMode: "{{  device_mode  }}"
+  totalOutboundBandwidth: 200000
+  totalInboundBandwidth: 200000
+  shapeInboundTraffic: true
+
+  deploymentInterfaces:
+
+    - interfaceName: "{{  lan_interface_name_0  }}"
+      interfaceComment:
+      interfaceLabel: "{{  lan_interface_name_0_label  }}"
+      ipAddressMask: "{{  lan_interface_name_0_ip  }}"
+      interfaceType: "{{  lan_interface_name_0_type  }}"
+
+    - interfaceName: "{{  wan_interface_name_0  }}"
+      interfaceComment:
+      ipAddressMask: "{{  wan_interface_name_0_ip  }}"
+      nextHop: "{{  wan_interface_name_0_nexthop  }}"
+      interfaceLabel:  "{{  wan_interface_name_0_label  }}"
+      interfaceType: "{{  wan_interface_name_0_type  }}"
+      outboundMaxBandwidth: "{{  wan_interface_name_0_nw_in  }}"
+      inboundMaxBandwidth: "{{  wan_interface_name_0_nw_out  }}"
+      firewallMode: "{{  wan_interface_name_0_fw_mode  }}"
+      behindNat: "{{  wan_interface_name_0_nat  }}"
+
+ #   - interfaceName: 
+ #     interfaceComment:
+ #     zone: 
+ #     ipAddressMask:
+ #     interfaceLabel: 
+ #     interfaceType: 
+ #     outboundMaxBandwidth: 
+ #     inboundMaxBandwidth: 
+ #     firewallMode: 
+ #     behindNat: 
+
+localRoutes:
+  useSharedSubnetInfo: true
+  advertiseLocalLanSubnets: true
+  advertiseLocalWanSubnets: false
+  localMetric: 50
+  localCommunities:
+  routes:
+    - routeIpSubnet: 0.0.0.0/0
+      nextHop: 10.50.21.1
+      metric: 50
+      advertise: true
+      advertiseToBgp: false
+      advertiseToOspf: false
+      tag: ANY
+      comment: adamp
+
+templateGroups:
+  groups:
+    - ec_vm
+
+businessIntentOverlays:
+  overlays:
+    - RealTime
