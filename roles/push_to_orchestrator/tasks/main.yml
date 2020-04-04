@@ -1,0 +1,26 @@
+---
+# tasks file for push_to_orchestrator
+    
+    - name: "Login to the orchestrator"
+      uri:
+        validate_certs: no
+        url:  "https://{{ orchip }}/gms/rest/authentication/login"
+        body: {"user": "{{ sewan_user }}", "password": "{{ sewan_password }}"}
+        body_format: json
+        return_content: yes
+        method: POST
+        headers:
+          Content-Type: "application/json"
+      register: orch 
+      
+    - name: "Post the file to the orchestrator"
+      uri:
+        validate_certs: no
+        url:  "https://{{ orchip }}/gms/rest/gms/appliance/preconfiguration/"
+        body: {"name": "{{ ztc_name }}", "configData": "{{ preconfigb64.stdout }}", "autoApply": "{{ auto_apply }}"}
+        body_format: json
+        return_content: yes
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          Cookie: "{{ orch.set_cookie }}"

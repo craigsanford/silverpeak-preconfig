@@ -1,0 +1,74 @@
+applianceInfo:
+  hostname: "test-ec-vm"
+  group: Group 1
+  location: 
+    address: "24 Finstock Way"
+    address2: "Bishopwayland"
+    city: "Newcastle"
+    state: "Bellway"
+    zipCode: "NE21 6QE"
+    country: "Wayland"
+  contact:
+    name: "Billy Fish"
+    email: "test@test.com"
+    phoneNumber: "08090848333"
+
+deploymentInfo:
+  deploymentMode: "inline-router"
+  totalOutboundBandwidth: 200000
+  totalInboundBandwidth: 200000
+  shapeInboundTraffic: true
+
+  deploymentInterfaces:
+
+    - interfaceName: "lan0"
+      interfaceComment:
+      interfaceLabel: "TRUST"
+      ipAddressMask: "10.100.0.1/24"
+      interfaceType: "lan"
+
+    - interfaceName: "wan0"
+      interfaceComment:
+      ipAddressMask: "109.150.47.242/30"
+      nextHop: "109.150.47.241"
+      interfaceLabel:  "INET1"
+      interfaceType: "wan"
+      outboundMaxBandwidth: "200000"
+      inboundMaxBandwidth: "2000000"
+      firewallMode: "statefulsnat"
+      behindNat: "auto"
+
+ #   - interfaceName: 
+ #     interfaceComment:
+ #     zone: 
+ #     ipAddressMask:
+ #     interfaceLabel: 
+ #     interfaceType: 
+ #     outboundMaxBandwidth: 
+ #     inboundMaxBandwidth: 
+ #     firewallMode: 
+ #     behindNat: 
+
+localRoutes:
+  useSharedSubnetInfo: true
+  advertiseLocalLanSubnets: true
+  advertiseLocalWanSubnets: false
+  localMetric: 50
+  localCommunities:
+  routes:
+    - routeIpSubnet: 0.0.0.0/0
+      nextHop: 10.50.21.1
+      metric: 50
+      advertise: true
+      advertiseToBgp: false
+      advertiseToOspf: false
+      tag: ANY
+      comment: adamp
+
+templateGroups:
+  groups:
+    - ec_vm
+
+businessIntentOverlays:
+  overlays:
+    - RealTime
