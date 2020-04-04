@@ -5,7 +5,7 @@
       uri:
         validate_certs: no
         url:  "https://{{ orchip }}/gms/rest/authentication/login"
-        body: {"user": "{{ sewan_user }}", "password": "{{ sewan_password }}"}
+        body: {"user": "{{ orch_user }}", "password": "{{ orch_password }}"}
         body_format: json
         return_content: yes
         method: POST
