@@ -82,4 +82,52 @@ deploymentInfo:
       firewallMode: {{  int.firewall_mode | default(omit)  }}
       behindNat: {{  int.behind_nat | default(omit)  }}
       zone: {{  int.zone | default(omit)  }}
+
 {% endfor %}
+# DHCP interfaces
+  dhcpInfo:
+{% for int in dhcp_info %}
+    - dhcpInterfaceName: {{  int.dhcp_interface }}
+      dhcpType: {{  int.dhcp_server }}
+      dhcpAddressMask: {{  int.dhcp_network }}
+      startIpAddress: {{  int.start_address }}
+      endIpAddress: {{  int.end_address }}
+      gatewayIpAddress: {{  int.gateway }}
+      dnsServers:
+{% for server in int.dns_servers %}
+        - {{  server | default(omit)  }}
+{% endfor %}
+      ntpServers:
+{% for server in int.ntp_servers %}
+{% if server != "" %}
+        - {{  server | default(omit)  }}
+{% endif %}
+{% endfor %}
+      netbiosNameServers:
+{% for server in int.net_bios_servers %}
+{% if server != "" %}
+        - {{  server | default(omit)  }}
+{% endif %}
+{% endfor %}
+      netbiosNodeType: {{  int.net_bios_node | default(omit)  }}
+      maximumLease: {{  int.max_lease | default(omit)  }}
+      defaultLease: {{  int.default_lease | default(omit)  }}
+      options:
+{% for option in int.dhcp_options %}
+{% if option.option != "" %}
+        - option: {{  option.option | default(omit)  }}
+          value:  {{  option.value | default(omit)  }}
+{% else %}
+{% endif %}
+{% endfor %}
+      staticIpAssignments:
+{% for ip in int.static_ip_addresses %}
+{% if ip.host_name != "" %}
+        - hostname: {{  ip.host_name | default(omit)  }}
+          macAddress: {{  ip.mac | default(omit)  }}
+          ipAddress: {{  ip.ip_addr | default(omit)  }}
+{% else %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+# end of deployment info

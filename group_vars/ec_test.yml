@@ -15,7 +15,6 @@ auto_apply: false
 
 # Template vars
 #############################
-# Appliance infomation
 host_name:      "{{  ec_device_name | lower  }}"
 group_name:     "Group 1"
 site_name:      "site 1"
@@ -72,6 +71,32 @@ wan_interfaces:
     firewall_mode: "statefulSNAT"
     behind_nat: "auto"
     zone: ""
+    
+#############################
+dhcp_info:
+  - dhcp_interface: "lan0.34"
+    dhcp_server:    "server"
+    dhcp_network:   "198.168.34.0/24"
+    start_address:  "198.168.34.2/24"
+    end_address:    "198.168.34.254/24" 
+    gateway:        "198.168.34.1/24"
+    dns_servers:
+     - "8.8.8.8"
+     - "8.8.4.4"
+    ntp_servers:
+     - ""
+    net_bios_servers:
+     - ""
+    net_bios_node:
+    max_lease: 24
+    default_lease: 24
+    dhcp_options:
+     - option: 15
+       value: "encom.net"
+    static_ip_addresses:
+     - host_name: ""
+       mac:       ""
+       ip_addr:   ""       
 
 #############################
 template_groups:

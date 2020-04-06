@@ -87,6 +87,7 @@ deploymentInfo:
       firewallMode: statefulSNAT
       behindNat: auto
       zone: 
+
     - interfaceName: wan1
       interfaceLabel: INET2
       interfaceType: wan
@@ -98,3 +99,25 @@ deploymentInfo:
       firewallMode: statefulSNAT
       behindNat: auto
       zone: 
+
+# DHCP interfaces
+  dhcpInfo:
+    - dhcpInterfaceName: lan0.34
+      dhcpType: server
+      dhcpAddressMask: 198.168.34.0/24
+      startIpAddress: 198.168.34.2/24
+      endIpAddress: 198.168.34.254/24
+      gatewayIpAddress: 198.168.34.1/24
+      dnsServers:
+        - 8.8.8.8
+        - 8.8.4.4
+      ntpServers:
+      netbiosNameServers:
+      netbiosNodeType: 
+      maximumLease: 24
+      defaultLease: 24
+      options:
+        - option: 15
+          value:  encom.net
+      staticIpAssignments:
+# end of deployment info
