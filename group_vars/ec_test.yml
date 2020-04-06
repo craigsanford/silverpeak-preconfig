@@ -1,50 +1,89 @@
+---
 # template details
 blank_template_store_path: "templates"
 built_template_store_path: "files"
-base_template_name: "ec_TEMPLATE.yml"
+base_template_name:        "ec_TEMPLATE_new.yml"
 
 # device infomation
-ec_device_name: "test-ec-vm"
+ec_device_name:         "test-ec-vm"
 rendered_template_name: "{{  built_template_store_path  }}/{{  ec_device_name  }}.yaml"
 
 # unity Orchestrator details
-orchip: "18.217.100.212" 
+orchip:   "18.217.100.212" 
 ztc_name: "{{  ec_device_name }}.yaml"
 auto_apply: false
 
 # Template vars
-address_1: "24 Finstock Way"
-address_2: "Bishopwayland"
-city_name: "Newcastle"
-state: "Bellway"
-postcode: "NE21 6QE"
-country: "Wayland"
+#############################
+# Appliance infomation
+host_name:      "{{  ec_device_name | lower  }}"
+group_name:     "Group 1"
+site_name:      "site 1"
+network_role:   "non-hub"
+region_name:    ""
+address_1:      "31 Fishburn Road"
+address_2:      ""
+city_name:      "San Jose"
+state_name:     "California"
+zip_code:       "94088"
+country_name:   "US"
+contact_name:   "sjcc.edu"
+contact_email:  "school@sjcc.edu"
+contact_number: "(408) 298-2181"
 
-# contact details
-name: "Billy Fish"
-email: "test@test.com"
-phone: "08090848333"
+#############################
+lan_interfaces:
+  - interface: "lan0.600"
+    interface_label: "TRUST"
+    interface_type: "lan"
+    interface_comment: "Main lan interface"
+    ip_address: "10.29.55.245/28"
+    next_hop: "10.29.55.241"
+    zone: ""
+  - interface: "lan0.34"
+    interface_label: "GUEST_WIRELESS"
+    interface_type: "lan"
+    interface_comment: "lan guest-wireless interface"
+    ip_address: "198.168.34.1/24"
+    next_hop: ""
+    zone: ""
 
-# Interfaces
-lan_interface_name_0: "lan0"
-#lan_interface_name_0_zone: "default"
-lan_interface_name_0_label: "TRUST"
-lan_interface_name_0_ip: "10.100.0.1/24"
-lan_interface_name_0_type: "lan"
+#############################
+wan_interfaces:
+  - interface: "wan0"
+    interface_label: "INET1"
+    interface_type: "wan"
+    interface_comment: "ISP 1 wan interface"
+    ip_address: "198.168.0.2/24"
+    next_hop: "198.168.0.3"
+    ob_max_bw: "200000"
+    ib_max_bw: "200000"
+    firewall_mode: "statefulSNAT"
+    behind_nat: "auto"
+    zone: ""
+  - interface: "wan1"
+    interface_label: "INET2"
+    interface_type: "wan"
+    interface_comment: "ISP 1 wan interface"
+    ip_address: "198.168.10.2/24"
+    next_hop: "198.168.10.3"
+    ob_max_bw: "200000"
+    ib_max_bw: "200000"
+    firewall_mode: "statefulSNAT"
+    behind_nat: "auto"
+    zone: ""
 
-wan_interface_name_0: "wan0"
-#wan_interface_name_0_zone: "default"
-wan_interface_name_0_ip: "109.150.47.242/30"
-wan_interface_name_0_nexthop: "109.150.47.241"
-wan_interface_name_0_label: "INET1"
-wan_interface_name_0_type: "wan"
-wan_interface_name_0_nw_in: 200000
-wan_interface_name_0_nw_out: 2000000
-wan_interface_name_0_fw_mode: "statefulsnat"
-wan_interface_name_0_nat: "auto"
-
-# deployment infomation
-device_mode: "inline-router"
+#############################
+template_groups:
+  - group: "ec_physical"
+  - group: "ec_vm"
+ 
+#############################
+business_intent_overlays:
+  - bio: "RealTime"
+  - bio: "CriticalApps"
+  - bio: "BulkApps"
+  - bio: "DefaultOverlay" 
 
 
  

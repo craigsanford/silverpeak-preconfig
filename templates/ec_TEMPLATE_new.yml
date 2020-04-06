@@ -1,0 +1,85 @@
+# Appliance infomation
+# Post-approval behavior: replace
+applianceInfo:
+  softwareVersion:
+  hostname: {{  host_name  }}
+  group: {{  group_name  }}
+  site: {{  site_name  }}
+  networkRole: {{  network_role  }}
+  region: {{  region_name | default(omit)  }}
+  location:
+    address: {{  address_1 | default(omit)  }}
+    address2: "{{  address_2 | default(omit)  }}"
+    city: "{{  city_name | default(omit)  }}"
+    state: "{{  state_name | default(omit)  }}"
+    zipCode: "{{  zip_code | default(omit)  }}"
+    country: "{{  country_name | default(omit)  }}"
+  contact:
+    name: "{{  contact_name | default(omit)  }}"
+    email: "{{  contact_email | default(omit)  }}"
+    phoneNumber: "{{  contact_number | default(omit)  }}"
+# Template groups to associate with appliance.
+# If no templates needed, remove this section
+  # groups -  list of template groups.
+  #           order of the list doesn't matter as Orchestrator
+  #          will decide templates application order
+  #          Value: list of template groups names
+  #
+  # Post-approval behavior: replace
+templateGroups:
+  groups:
+{% for template_group in template_groups %}
+    - {{ template_group.group }}
+{% endfor %}
+# end of template group
+
+# Preconfiguration Template for associating Business Intent Overlays
+  # overlays - list of overlays to be applied to appliance,
+  #             Overlays must be already defined in Orchestrator
+  #             Value: list of overlays names
+  #
+  # Post-approval behavior: merge
+businessIntentOverlays:
+  overlays:
+{% for business_intent_overlay in business_intent_overlays %}
+    - {{ business_intent_overlay.bio }}
+{% endfor %}  
+# end of Business Intent Overlays section
+
+  # Post-approval behavior: replace
+deploymentInfo:
+  deploymentMode: inline-router
+  totalOutboundBandwidth: 200000
+  totalInboundBandwidth: 200000
+  shapeInboundTraffic: true
+  ipsecUdpPort: 12000
+  passThroughShapedTraffic:
+    outboundMaxBandwidth: 10000000
+
+  deploymentInterfaces:
+# lan interfaces  
+{% set interface_count = 0 %}
+{% for int in lan_interfaces %}
+    - interfaceName: {{  int.interface }}
+      interfaceLabel: {{  int.interface_label | default(omit) }}
+      interfaceType: {{  int.interface_type | default(omit)  }}
+      interfaceComment: {{  int.interface_comment | default(omit)  }}
+      ipAddressMask: {{  int.ip_address | default(omit)  }}
+      nextHop: {{  int.next_hop | default(omit)  }}
+      zone: {{  int.zone | default(omit)  }}
+
+{% endfor %}
+# wan interfaces
+{% for int in wan_interfaces %}
+    - interfaceName: {{  int.interface }}
+      interfaceLabel: {{  int.interface_label | default(omit) }}
+      interfaceType: {{  int.interface_type | default(omit)  }}
+      interfaceComment: {{  int.interface_comment | default(omit)  }}
+      ipAddressMask: {{  int.ip_address | default(omit)  }}
+      nextHop: {{  int.next_hop | default(omit)  }}
+      outboundMaxBandwidth: {{  int.ob_max_bw | default(omit)  }}
+      inboundMaxBandwidth: {{  int.ib_max_bw | default(omit)  }}
+      firewallMode: {{  int.firewall_mode | default(omit)  }}
+      behindNat: {{  int.behind_nat | default(omit)  }}
+      zone: {{  int.zone | default(omit)  }}
+{% endfor %}
