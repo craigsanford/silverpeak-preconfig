@@ -11,7 +11,9 @@ rendered_template_name: "{{  built_template_store_path  }}/{{  ec_device_name  }
 # unity Orchestrator details
 orchip:   "18.217.100.212" 
 ztc_name: "{{  ec_device_name }}.yaml"
-auto_apply: false
+ec_serial: "001BBC1C4390"
+auto_apply: true
+ztc_comment: "Pushed by RAllsopp"
 
 # Template vars
 #############################
@@ -77,9 +79,9 @@ dhcp_info:
   - dhcp_interface: "lan0.34"
     dhcp_server:    "server"
     dhcp_network:   "198.168.34.0/24"
-    start_address:  "198.168.34.2/24"
-    end_address:    "198.168.34.254/24" 
-    gateway:        "198.168.34.1/24"
+    start_address:  "198.168.34.2"
+    end_address:    "198.168.34.254" 
+    gateway:        "198.168.34.1"
     dns_servers:
      - "8.8.8.8"
      - "8.8.4.4"
@@ -109,6 +111,28 @@ business_intent_overlays:
   - bio: "CriticalApps"
   - bio: "BulkApps"
   - bio: "DefaultOverlay" 
+  
+#############################
+license_model: "base"
+apply_boost: "" #number in Kb
 
+#############################
+use_subnet_sharing: true
+advertise_local_lan_subnets: true
+advertise_local_wan_subnets: false
+local_metric: "50"
+community_sting: "000888:1004"
+redist_ospf_subnet_share: false
+ospf_redist_metric: ""
+ospf_tag: ""
 
- 
+local_routing:
+ - route_subnet: "10.29.55.0/24"
+   route_subnet_next_hop: "10.29.55.241"
+   route_subnet_interface_name: "lan0.600"
+   route_subnet_metric: "50"
+   route_subnet_advertise: true
+   route_subnet_advertise_to_bgp: false
+   route_subnet_advertise_to_ospf: false
+   route_subnet_tag: "FROM_LAN" # Value: [ANY, FROM_LAN,FROM_WAN], optional, default empty
+   route_subnet_comment: "Southbound route to switch"

@@ -131,3 +131,160 @@ deploymentInfo:
 {% endfor %}
 {% endfor %}
 # end of deployment info
+
+# Preconfiguration Template for ecLicensing
+ecLicensing:
+  # this ecLicensing section is mandatory for enterprise EC licensed models.
+  # For VX/NX appliances, please remove the
+  # whole section as this is not needed.
+  # To configure appliance EC license account name/key,
+  # either set useDefaultEcAccount to true to use
+  # the default EC account that is configured on the Orchestrator,
+  # or set useDefaultAccount to false
+  # and specify the accountName and accountKey.
+  useDefaultAccount: true
+  # uncomment the following and provide a valid account name/key
+  # if above useDefaultAccount is set to false
+  # accountName: <name>
+  # accountKey: <key>
+
+  # There are three types of EC licenses, each of which employs
+  # a different license configuration schema.
+  # Note: bandwidth value for bandwidthLevel and Boost
+  # are represent bidirectional
+  # bandwidth, and applies to both inbound and outbound directions
+
+  # for EC-Enterprise licensing, bandwidth Level and boost both
+  # need to be configured
+  #
+  # NOTE that the allowed total outbound bandwidth will be limited by the
+  # bandwidth license currently in effect. Simultaneous changes to total
+  # outbound bandwidth and licensed bandwidth is not supported.
+  # Changing the licensed bandwidth to a new value should be done first,
+  # before changing the total outbound bandwidth
+  #
+  # bandwidthLevel: valid values are mini, base or plus or,
+  #    a bandwidth tier level (mini, base, plus)
+  #    license types represent (<50Mbps, <200Mbps, and <1Tbps) respectively.
+  #    plus licensing enables bandwidth configuration >200Mbps and up to 10Gbps,
+  #    subject to hardware or VM limitations.
+  #    bandwidthLevel can also be used to specify enterprise bandwidth tiers.
+  #    Valid values include
+  #    {50000, 200000, 500000, 1000000, 2000000, unlimited} (kbps)
+  #    which represent 50M, 200M, 500M, 1G, 2G, and 1T,
+  #    subject to hardware or VM limitations.
+  #
+  # boost: valid value is between 0 to 10000000 (kbps)
+  # Example - Enterprise with 'Base' bandwidthLevel and 100000Kbps Boost
+  #           bandwidth
+  # bandwidthLevel: base
+  # boost: 100000
+
+  # for service provider EC-Term licensing, the serial number of the license
+  # needs to be configured
+  #     licenseSerial: <serial number for license asset>
+  # Example - Term license serial number assignment
+  # licenseSerial: <to-be-added-with-real-serial??>
+
+  # for service provider EC-Metered licensing, the max system bandwidth
+  # needs to be configured, representing the metered bandwidth level.
+  # Boost bandwidth can be configured here via the 'boost' keyword
+  #    boost: valid value is between 0 to 50000000 (Kbps)
+  # Example - Metered with 50000Kbps boost bandwidth
+  # boost: 50000
+
+  #  the following is an uncommented example of EC-Enterprise licensing
+  bandwidthLevel: {{  license_model  }}
+  boost: {{  apply_boost | default(omit)  }}
+  #
+  #(perform "replace" operation whenever applied)
+# end of ecLicensing
+
+# Preconfiguration Template for Local Routes
+  # This section is optional, if this section is missing, appliance will
+  # have the following defaults:
+  #   useSharedSubnetInfo - Use shared subnet information
+  #                         among Silver Peak appliances
+  #                         Value: [true, false], optional, default true
+  #   advertiseLocalLanSubnets  - advertise local lan side subnets
+  #                               Value: [true, false], optional, default false
+  #   advertiseLocalWanSubnets  - advertise local wan side subnets
+  #                               Value: [true, false], optional, default false
+  #   localMetric - Routing metric for automatically added routes. This value can
+  #                 be between 0 and 100 and is the metric assigned to subnets of
+  #                 interfaces on this appliance. The lower the metric, the high-
+  #                 er the priority.
+  #                 Value: range between 0-100, required, default: 50
+  #   localCommunities - as-number:community-value, where each value is a
+  #                      decimal number. The AS values of 0 and 65,535 are
+  #                      reserved, as are all of the community values within
+  #                      those AS numbers. Max of 3, comma separated.
+  #                      Value: string, optional, default empty
+  #   redistOspfToSubnetShare - Redistribute OSPF routes to SD-WAN Fabric.
+  #                             Value: [true, false](enable/disable), optional,
+  #                             default: false
+  #   ospfRedistMetric - Metric for redistributing OSPF routes to SD-WAN Fabric.
+  #                      Metric is distributed when enableRedistOspfToSubnetShare
+  #                      is enabled.
+  #                      Value: integer [0, 4294967295], optional, default: 0
+  #   ospfRedistTag - Filter Tag for redistributing OSPF routes to SD-WAN Fabric.
+  #                   Tag is distributed when enableRedistOspfToSubnetShare
+  #                   is enabled
+  #                   Value: integer [0, 4294967295], optional, default: 0
+  #
+  #   routes - A list of routes, each route comprises the following key/value
+  #      routeIpSubnet - Subnet/mask for this route entry, support IPv4 and IPv6.
+  #                      SubnetMask and nextHop should be of same IP version.
+  #                      Value: Valid IPv4/IPv6 address and mask,required
+  #
+  #      nextHop - Next-hop IP address, support IPv4 and IPv6.
+  #                SubnetMask and nextHop should be of same IP version.
+  #                Value: Valid IPv4/IPv6 address, optional
+  #
+  #     interfaceName - The interface for outgoing traffic.
+  #                     Values: Valid datapath interface name for eg lan0, wan0
+  #                             This filed is optional, default empty
+  #
+  #      metric  -  A value between 0 and 100. When an appliance finds more than
+  #                 one peer appliance advertising the longest matching subnet
+  #                 (for example, in a high availability deployment), it chooses
+  #                 the peer that advertises the subnet with the lowest metric
+  #                 value - that is, lower metric values have priority.
+  #                 Value: range between 0-100, optional, default: 50
+  #
+  #      advertise - Whether to share this subnet information with peers.
+  #                  Value: [true,false], optional, default: false
+  #      advertiseToBgp - Advertise to BGP peers.
+  #                       Value: [true,false], optional, default: false
+  #      advertiseToOspf - Advertise to OSPF peers.
+  #                       Value: [true,false], optional, default: false
+  #      tag - Tag
+  #            Value: [ANY, FROM_LAN,FROM_WAN], optional, default empty
+  #      comment - Comment
+  #                Value: any string, optional, default empty
+  #
+  # Post-approval behavior: replace
+
+localRoutes:
+  useSharedSubnetInfo: {{  use_subnet_sharing  }}
+  advertiseLocalLanSubnets: {{  advertise_local_lan_subnets  }}
+  advertiseLocalWanSubnets: {{  advertise_local_wan_subnets  }}
+  localMetric: {{  local_metric  }}
+  localCommunities: {{  community_sting  }}
+  redistOspfToSubnetShare: {{  redist_ospf_subnet_share  }}
+  ospfRedistMetric: {{  ospf_redist_metric  }}
+  ospfRedistTag: {{  ospf_tag  }}
+
+  routes:
+{% for route in local_routing %}
+    - routeIpSubnet: {{  route.route_subnet  }}
+      nextHop: {{  route.route_subnet_next_hop  }}
+      interfaceName: {{  route.route_subnet_interface_name  }}
+      metric: {{  route.route_subnet_metric  }}
+      advertise: {{  route.route_subnet_advertise  }}
+      advertiseToBgp: {{  route.route_subnet_advertise_to_bgp  }}
+      advertiseToOspf: {{  route.route_subnet_advertise_to_ospf  }}
+      tag: {{  route.route_subnet_tag  }}
+      comment: {{  route.route_subnet_comment | default(omit)  }}
+{% endfor %}      
+# end of Local Routes section
