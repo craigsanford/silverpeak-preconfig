@@ -17,7 +17,7 @@
       uri:
         validate_certs: no
         url:  "https://{{ orchip }}/gms/rest/gms/appliance/preconfiguration/"
-        body: {"name": "{{ ztc_name }}", "configData": "{{ preconfigb64.stdout }}", "autoApply": "{{ auto_apply }}"}
+        body: {"name": "{{ ztc_name }}", "serialNum": "{{ ec_serial }}", "configData": "{{ preconfigb64.stdout }}", "comment": "{{ ztc_comment }}", "autoApply": "{{ auto_apply }}"}
         body_format: json
         return_content: yes
         method: POST

@@ -1,74 +1,279 @@
+# Appliance infomation
+# Post-approval behavior: replace
 applianceInfo:
-  hostname: "test-ec-vm"
+  softwareVersion:
+  hostname: test-ec-vm
   group: Group 1
-  location: 
-    address: "24 Finstock Way"
-    address2: "Bishopwayland"
-    city: "Newcastle"
-    state: "Bellway"
-    zipCode: "NE21 6QE"
-    country: "Wayland"
+  site: site 1
+  networkRole: non-hub
+  region: 
+  location:
+    address: 31 Fishburn Road
+    address2: ""
+    city: "San Jose"
+    state: "California"
+    zipCode: "94088"
+    country: "US"
   contact:
-    name: "Billy Fish"
-    email: "test@test.com"
-    phoneNumber: "08090848333"
-
-deploymentInfo:
-  deploymentMode: "inline-router"
-  totalOutboundBandwidth: 200000
-  totalInboundBandwidth: 200000
-  shapeInboundTraffic: true
-
-  deploymentInterfaces:
-
-    - interfaceName: "lan0"
-      interfaceComment:
-      interfaceLabel: "TRUST"
-      ipAddressMask: "10.100.0.1/24"
-      interfaceType: "lan"
-
-    - interfaceName: "wan0"
-      interfaceComment:
-      ipAddressMask: "109.150.47.242/30"
-      nextHop: "109.150.47.241"
-      interfaceLabel:  "INET1"
-      interfaceType: "wan"
-      outboundMaxBandwidth: "200000"
-      inboundMaxBandwidth: "2000000"
-      firewallMode: "statefulsnat"
-      behindNat: "auto"
-
- #   - interfaceName: 
- #     interfaceComment:
- #     zone: 
- #     ipAddressMask:
- #     interfaceLabel: 
- #     interfaceType: 
- #     outboundMaxBandwidth: 
- #     inboundMaxBandwidth: 
- #     firewallMode: 
- #     behindNat: 
-
-localRoutes:
-  useSharedSubnetInfo: true
-  advertiseLocalLanSubnets: true
-  advertiseLocalWanSubnets: false
-  localMetric: 50
-  localCommunities:
-  routes:
-    - routeIpSubnet: 0.0.0.0/0
-      nextHop: 10.50.21.1
-      metric: 50
-      advertise: true
-      advertiseToBgp: false
-      advertiseToOspf: false
-      tag: ANY
-      comment: adamp
-
+    name: "sjcc.edu"
+    email: "school@sjcc.edu"
+    phoneNumber: "(408) 298-2181"
+# Template groups to associate with appliance.
+# If no templates needed, remove this section
+  # groups -  list of template groups.
+  #           order of the list doesn't matter as Orchestrator
+  #          will decide templates application order
+  #          Value: list of template groups names
+  #
+  # Post-approval behavior: replace
 templateGroups:
   groups:
+    - ec_physical
     - ec_vm
+# end of template group
 
+# Preconfiguration Template for associating Business Intent Overlays
+  # overlays - list of overlays to be applied to appliance,
+  #             Overlays must be already defined in Orchestrator
+  #             Value: list of overlays names
+  #
+  # Post-approval behavior: merge
 businessIntentOverlays:
   overlays:
     - RealTime
+    - CriticalApps
+    - BulkApps
+    - DefaultOverlay
+  
+# end of Business Intent Overlays section
+
+  # Post-approval behavior: replace
+deploymentInfo:
+  deploymentMode: inline-router
+  totalOutboundBandwidth: 200000
+  totalInboundBandwidth: 200000
+  shapeInboundTraffic: true
+  ipsecUdpPort: 12000
+  passThroughShapedTraffic:
+    outboundMaxBandwidth: 10000000
+
+  deploymentInterfaces:
+# lan interfaces  
+    - interfaceName: lan0.600
+      interfaceLabel: TRUST
+      interfaceType: lan
+      interfaceComment: Main lan interface
+      ipAddressMask: 10.29.55.245/28
+      nextHop: 10.29.55.241
+      zone: 
+
+    - interfaceName: lan0.34
+      interfaceLabel: GUEST_WIRELESS
+      interfaceType: lan
+      interfaceComment: lan guest-wireless interface
+      ipAddressMask: 198.168.34.1/24
+      nextHop: 
+      zone: 
+
+# wan interfaces
+    - interfaceName: wan0
+      interfaceLabel: INET1
+      interfaceType: wan
+      interfaceComment: ISP 1 wan interface
+      ipAddressMask: 198.168.0.2/24
+      nextHop: 198.168.0.3
+      outboundMaxBandwidth: 200000
+      inboundMaxBandwidth: 200000
+      firewallMode: statefulSNAT
+      behindNat: auto
+      zone: 
+
+    - interfaceName: wan1
+      interfaceLabel: INET2
+      interfaceType: wan
+      interfaceComment: ISP 1 wan interface
+      ipAddressMask: 198.168.10.2/24
+      nextHop: 198.168.10.3
+      outboundMaxBandwidth: 200000
+      inboundMaxBandwidth: 200000
+      firewallMode: statefulSNAT
+      behindNat: auto
+      zone: 
+
+# DHCP interfaces
+  dhcpInfo:
+    - dhcpInterfaceName: lan0.34
+      dhcpType: server
+      dhcpAddressMask: 198.168.34.0/24
+      startIpAddress: 198.168.34.2
+      endIpAddress: 198.168.34.254
+      gatewayIpAddress: 198.168.34.1
+      dnsServers:
+        - 8.8.8.8
+        - 8.8.4.4
+      ntpServers:
+      netbiosNameServers:
+      netbiosNodeType: 
+      maximumLease: 24
+      defaultLease: 24
+      options:
+        - option: 15
+          value:  encom.net
+      staticIpAssignments:
+# end of deployment info
+
+# Preconfiguration Template for ecLicensing
+ecLicensing:
+  # this ecLicensing section is mandatory for enterprise EC licensed models.
+  # For VX/NX appliances, please remove the
+  # whole section as this is not needed.
+  # To configure appliance EC license account name/key,
+  # either set useDefaultEcAccount to true to use
+  # the default EC account that is configured on the Orchestrator,
+  # or set useDefaultAccount to false
+  # and specify the accountName and accountKey.
+  useDefaultAccount: true
+  # uncomment the following and provide a valid account name/key
+  # if above useDefaultAccount is set to false
+  # accountName: <name>
+  # accountKey: <key>
+
+  # There are three types of EC licenses, each of which employs
+  # a different license configuration schema.
+  # Note: bandwidth value for bandwidthLevel and Boost
+  # are represent bidirectional
+  # bandwidth, and applies to both inbound and outbound directions
+
+  # for EC-Enterprise licensing, bandwidth Level and boost both
+  # need to be configured
+  #
+  # NOTE that the allowed total outbound bandwidth will be limited by the
+  # bandwidth license currently in effect. Simultaneous changes to total
+  # outbound bandwidth and licensed bandwidth is not supported.
+  # Changing the licensed bandwidth to a new value should be done first,
+  # before changing the total outbound bandwidth
+  #
+  # bandwidthLevel: valid values are mini, base or plus or,
+  #    a bandwidth tier level (mini, base, plus)
+  #    license types represent (<50Mbps, <200Mbps, and <1Tbps) respectively.
+  #    plus licensing enables bandwidth configuration >200Mbps and up to 10Gbps,
+  #    subject to hardware or VM limitations.
+  #    bandwidthLevel can also be used to specify enterprise bandwidth tiers.
+  #    Valid values include
+  #    {50000, 200000, 500000, 1000000, 2000000, unlimited} (kbps)
+  #    which represent 50M, 200M, 500M, 1G, 2G, and 1T,
+  #    subject to hardware or VM limitations.
+  #
+  # boost: valid value is between 0 to 10000000 (kbps)
+  # Example - Enterprise with 'Base' bandwidthLevel and 100000Kbps Boost
+  #           bandwidth
+  # bandwidthLevel: base
+  # boost: 100000
+
+  # for service provider EC-Term licensing, the serial number of the license
+  # needs to be configured
+  #     licenseSerial: <serial number for license asset>
+  # Example - Term license serial number assignment
+  # licenseSerial: <to-be-added-with-real-serial??>
+
+  # for service provider EC-Metered licensing, the max system bandwidth
+  # needs to be configured, representing the metered bandwidth level.
+  # Boost bandwidth can be configured here via the 'boost' keyword
+  #    boost: valid value is between 0 to 50000000 (Kbps)
+  # Example - Metered with 50000Kbps boost bandwidth
+  # boost: 50000
+
+  #  the following is an uncommented example of EC-Enterprise licensing
+  bandwidthLevel: base
+  boost: 
+  #
+  #(perform "replace" operation whenever applied)
+# end of ecLicensing
+
+# Preconfiguration Template for Local Routes
+  # This section is optional, if this section is missing, appliance will
+  # have the following defaults:
+  #   useSharedSubnetInfo - Use shared subnet information
+  #                         among Silver Peak appliances
+  #                         Value: [true, false], optional, default true
+  #   advertiseLocalLanSubnets  - advertise local lan side subnets
+  #                               Value: [true, false], optional, default false
+  #   advertiseLocalWanSubnets  - advertise local wan side subnets
+  #                               Value: [true, false], optional, default false
+  #   localMetric - Routing metric for automatically added routes. This value can
+  #                 be between 0 and 100 and is the metric assigned to subnets of
+  #                 interfaces on this appliance. The lower the metric, the high-
+  #                 er the priority.
+  #                 Value: range between 0-100, required, default: 50
+  #   localCommunities - as-number:community-value, where each value is a
+  #                      decimal number. The AS values of 0 and 65,535 are
+  #                      reserved, as are all of the community values within
+  #                      those AS numbers. Max of 3, comma separated.
+  #                      Value: string, optional, default empty
+  #   redistOspfToSubnetShare - Redistribute OSPF routes to SD-WAN Fabric.
+  #                             Value: [true, false](enable/disable), optional,
+  #                             default: false
+  #   ospfRedistMetric - Metric for redistributing OSPF routes to SD-WAN Fabric.
+  #                      Metric is distributed when enableRedistOspfToSubnetShare
+  #                      is enabled.
+  #                      Value: integer [0, 4294967295], optional, default: 0
+  #   ospfRedistTag - Filter Tag for redistributing OSPF routes to SD-WAN Fabric.
+  #                   Tag is distributed when enableRedistOspfToSubnetShare
+  #                   is enabled
+  #                   Value: integer [0, 4294967295], optional, default: 0
+  #
+  #   routes - A list of routes, each route comprises the following key/value
+  #      routeIpSubnet - Subnet/mask for this route entry, support IPv4 and IPv6.
+  #                      SubnetMask and nextHop should be of same IP version.
+  #                      Value: Valid IPv4/IPv6 address and mask,required
+  #
+  #      nextHop - Next-hop IP address, support IPv4 and IPv6.
+  #                SubnetMask and nextHop should be of same IP version.
+  #                Value: Valid IPv4/IPv6 address, optional
+  #
+  #     interfaceName - The interface for outgoing traffic.
+  #                     Values: Valid datapath interface name for eg lan0, wan0
+  #                             This filed is optional, default empty
+  #
+  #      metric  -  A value between 0 and 100. When an appliance finds more than
+  #                 one peer appliance advertising the longest matching subnet
+  #                 (for example, in a high availability deployment), it chooses
+  #                 the peer that advertises the subnet with the lowest metric
+  #                 value - that is, lower metric values have priority.
+  #                 Value: range between 0-100, optional, default: 50
+  #
+  #      advertise - Whether to share this subnet information with peers.
+  #                  Value: [true,false], optional, default: false
+  #      advertiseToBgp - Advertise to BGP peers.
+  #                       Value: [true,false], optional, default: false
+  #      advertiseToOspf - Advertise to OSPF peers.
+  #                       Value: [true,false], optional, default: false
+  #      tag - Tag
+  #            Value: [ANY, FROM_LAN,FROM_WAN], optional, default empty
+  #      comment - Comment
+  #                Value: any string, optional, default empty
+  #
+  # Post-approval behavior: replace
+
+localRoutes:
+  useSharedSubnetInfo: True
+  advertiseLocalLanSubnets: True
+  advertiseLocalWanSubnets: False
+  localMetric: 50
+  localCommunities: 000888:1004
+  redistOspfToSubnetShare: False
+  ospfRedistMetric: 
+  ospfRedistTag: 
+
+  routes:
+    - routeIpSubnet: 10.29.55.0/24
+      nextHop: 10.29.55.241
+      interfaceName: lan0.600
+      metric: 50
+      advertise: True
+      advertiseToBgp: False
+      advertiseToOspf: False
+      tag: FROM_LAN
+      comment: Southbound route to switch
+      
+# end of Local Routes section
