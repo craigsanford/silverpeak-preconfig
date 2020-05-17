@@ -24,3 +24,14 @@
         headers:
           Content-Type: "application/json"
           Cookie: "{{ orch.set_cookie }}"
+
+    - name: "Logout of the orchestrator"
+      uri:
+        validate_certs: no
+        url:  "https://{{ orchip }}/gms/rest/authentication/logout"
+        body_format: json
+        return_content: yes
+        method: GET
+        headers:
+          Content-Type: "application/json"
+          Cookie: "{{ orch.set_cookie }}"          
